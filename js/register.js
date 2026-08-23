@@ -92,12 +92,15 @@ form.addEventListener("submit", async (e) => {
     });
 
     showMessage(messageBox, "Account created successfully. Redirecting…", "success");
+    alert("SUCCESS: Firestore profile saved for UID: " + user.uid + "\n\nGo check Firestore now — a document with this exact ID should exist in the users collection.");
     setTimeout(() => {
       window.location.href = "index.html";
     }, 1200);
   } catch (err) {
     console.error("Registration failed:", err);
+    alert("REGISTRATION ERROR\n\nCode: " + (err.code || "unknown") + "\n\nMessage: " + (err.message || "no message") + "\n\nFull details: " + JSON.stringify(err));
     showMessage(messageBox, friendlyAuthError(err), "error");
     setButtonLoading(submitBtn, false);
   }
 });
+      
