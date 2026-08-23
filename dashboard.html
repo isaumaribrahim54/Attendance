@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Student Practical Attendance System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body data-protected="auth">
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__brand"><span class="nav__mark">SP</span>Practical Attendance</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li data-nav="auth-only" hidden><a href="attendance.html">Attendance</a></li>
+        <li data-nav="auth-only" hidden><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="about.html">About</a></li>
+        <li data-nav="admin-only" hidden><a href="admin.html">Admin Panel</a></li>
+        <li data-nav="guest-only"><a href="login.html">Login</a></li>
+        <li data-nav="auth-only" hidden><span class="nav__user" data-nav="user-name"></span></li>
+        <li data-nav="auth-only" hidden><button class="nav__logout" data-action="logout">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="section container">
+    <div class="section__header">
+      <h1>Dashboard</h1>
+      <p>A live overview of practical attendance across the department.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-card__label">Total students</div><div class="stat-card__value" id="stat-total-students">—</div></div>
+      <div class="stat-card"><div class="stat-card__label">Total sessions</div><div class="stat-card__value" id="stat-total-sessions">—</div></div>
+      <div class="stat-card"><div class="stat-card__label">Open sessions</div><div class="stat-card__value" id="stat-open-sessions">—</div></div>
+      <div class="stat-card"><div class="stat-card__label">Attendance records</div><div class="stat-card__value" id="stat-total-records">—</div></div>
+      <div class="stat-card"><div class="stat-card__label">Present today</div><div class="stat-card__value" id="stat-present-today">—</div></div>
+      <div class="stat-card"><div class="stat-card__label">Absent today</div><div class="stat-card__value" id="stat-absent-today">—</div></div>
+    </div>
+
+    <div class="ranking-panel">
+      <div class="ranking-panel__header">
+        <h2>Top 50 attendance</h2>
+      </div>
+      <p class="ranking-panel__note">Ranked by attendance percentage across closed sessions. Ties are broken by classes attended, then name (A–Z).</p>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th><th>Name</th><th>Reg. Number</th><th>Department</th>
+              <th>Attended</th><th>Absent</th><th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-body"></tbody>
+        </table>
+      </div>
+      <p id="ranking-empty" class="empty-state" hidden>No closed sessions yet — rankings will appear once a practical session ends.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Student Practical Attendance System · Built by Isa Umar Ibrahim, Department of Computer Science
+    </div>
+  </footer>
+
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance · Student Practical Attendance System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-protected="auth">
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__brand"><span class="nav__mark">SP</span>Practical Attendance</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li data-nav="auth-only" hidden><a href="attendance.html">Attendance</a></li>
+        <li data-nav="auth-only" hidden><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="about.html">About</a></li>
+        <li data-nav="admin-only" hidden><a href="admin.html">Admin Panel</a></li>
+        <li data-nav="guest-only"><a href="login.html">Login</a></li>
+        <li data-nav="auth-only" hidden><span class="nav__user" data-nav="user-name"></span></li>
+        <li data-nav="auth-only" hidden><button class="nav__logout" data-action="logout">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="section container">
+    <div class="section__header">
+      <h1>Practical attendance</h1>
+      <p>Mark PRESENT while a session is open. You can only do this once per session.</p>
+    </div>
+
+    <ul id="sessions-list" style="list-style:none; padding:0; margin:0;"></ul>
+    <p id="sessions-empty" class="empty-state" hidden>No practical sessions have been created yet.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Student Practical Attendance System · Built by Isa Umar Ibrahim, Department of Computer Science
+    </div>
+  </footer>
+
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/attendance.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About · Student Practical Attendance System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-protected="none">
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__brand"><span class="nav__mark">SP</span>Practical Attendance</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li data-nav="auth-only" hidden><a href="attendance.html">Attendance</a></li>
+        <li data-nav="auth-only" hidden><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="about.html">About</a></li>
+        <li data-nav="admin-only" hidden><a href="admin.html">Admin Panel</a></li>
+        <li data-nav="guest-only"><a href="login.html">Login</a></li>
+        <li data-nav="auth-only" hidden><span class="nav__user" data-nav="user-name"></span></li>
+        <li data-nav="auth-only" hidden><button class="nav__logout" data-action="logout">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="section container" style="max-width:760px;">
+    <h1>About this system</h1>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3 style="margin-bottom:0.75rem;">Student Practical Attendance System</h3>
+      <p>
+        This system replaces the paper attendance sheet used during practical
+        classes. A lecturer or administrator opens a session for a specific
+        practical, with a defined opening and closing time. While the session
+        is open, students mark themselves present directly from their own
+        device. Once the session closes, the record is final: who attended,
+        who didn't, and when each student checked in — all stored securely
+        and available at a glance.
+      </p>
+      <p>
+        The goal is accuracy and accountability: no more misplaced sheets,
+        no signing in for a classmate, and a clear attendance history for
+        every student across every practical course.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:0.75rem;">Built by</h3>
+      <p style="margin-bottom:0.25rem;"><strong>Isa Umar Ibrahim</strong></p>
+      <p style="margin:0; color:var(--ink-soft);">Department of Computer Science</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Student Practical Attendance System · Built by Isa Umar Ibrahim, Department of Computer Science
+    </div>
+  </footer>
+
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

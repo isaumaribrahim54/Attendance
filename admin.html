@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel · Student Practical Attendance System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-protected="admin">
+
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="nav__brand"><span class="nav__mark">SP</span>Practical Attendance</a>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li data-nav="auth-only" hidden><a href="attendance.html">Attendance</a></li>
+        <li data-nav="auth-only" hidden><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="about.html">About</a></li>
+        <li data-nav="admin-only" hidden><a href="admin.html">Admin Panel</a></li>
+        <li data-nav="guest-only"><a href="login.html">Login</a></li>
+        <li data-nav="auth-only" hidden><span class="nav__user" data-nav="user-name"></span></li>
+        <li data-nav="auth-only" hidden><button class="nav__logout" data-action="logout">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="section container">
+    <div class="section__header">
+      <h1>Admin panel</h1>
+      <p>Create practical sessions and manage attendance records. Manage announcements from the Home page.</p>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-panel-card">
+        <h3>Create practical session</h3>
+        <form id="session-form">
+          <div id="session-message" class="form-message" hidden></div>
+          <div class="form-field">
+            <label for="courseCode">Course code</label>
+            <input type="text" id="courseCode" name="courseCode" placeholder="COM 111" required>
+          </div>
+          <div class="form-field">
+            <label for="courseTitle">Course title</label>
+            <input type="text" id="courseTitle" name="courseTitle" placeholder="Introduction to Computer" required>
+          </div>
+          <div class="form-field">
+            <label for="date">Practical date</label>
+            <input type="date" id="date" name="date" required>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="openingTime">Opening time</label>
+              <input type="time" id="openingTime" name="openingTime" required>
+            </div>
+            <div class="form-field">
+              <label for="closingTime">Closing time</label>
+              <input type="time" id="closingTime" name="closingTime" required>
+            </div>
+          </div>
+          <button type="submit" id="session-submit" class="btn btn--primary btn--block">Create session</button>
+        </form>
+      </div>
+
+      <div>
+        <div class="filters-bar">
+          <input type="text" id="search-reg-number" placeholder="Search by registration number">
+          <select id="filter-course"><option value="">All courses</option></select>
+          <input type="date" id="filter-date">
+        </div>
+
+        <ul id="admin-sessions-list" style="list-style:none; padding:0; margin:0;"></ul>
+        <p id="admin-sessions-empty" class="empty-state" hidden>No practical sessions match your filters.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Student Practical Attendance System · Built by Isa Umar Ibrahim, Department of Computer Science
+    </div>
+  </footer>
+
+  <script type="module" src="js/firebase-config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

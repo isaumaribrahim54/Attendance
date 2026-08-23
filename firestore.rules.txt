@@ -1,0 +1,104 @@
+rules_version = '2';
+
+// ============================================================================
+// Student Practical Attendance System — Firestore Security Rules
+//
+// Paste this into: Firebase Console -> Firestore Database -> Rules -> Publish
+//
+// These rules are the REAL authorization boundary. Every check the frontend
+// JavaScript does (hiding buttons, redirecting pages) is only for a smooth
+// user experience — a user could bypass all of that by calling the Firebase
+// SDK directly from the browser console. These rules make sure that even
+// then, nothing unauthorized is possible.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: is the caller signed in at all?
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: does the caller's own user document say role == "admin"?
+    // We read /users/{uid} for the CALLER (not the target document), so this
+    // cannot be spoofed by editing the request payload.
+    function isAdmin() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    // ---------------- users (student/admin profiles) ----------------
+    match /users/{userId} {
+      // Anyone signed in can read profiles (needed for rosters, rankings,
+      // and the admin panel's present/absent lists).
+      allow read: if isSignedIn();
+
+      // A user may only ever create THEIR OWN profile document, and it must
+      // be created with role == "student". There is no path that lets the
+      // public registration form set role to "admin".
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.role == "student";
+
+      // A student may update their own profile, but can NEVER change uid,
+      // registrationNumber, or role. Admins can update any profile
+      // (e.g. to promote a trusted account to admin manually from the
+      // Firebase console/back office, or fix a typo in a student's record).
+      allow update: if isAdmin() || (
+        isSignedIn() && request.auth.uid == userId &&
+        request.resource.data.uid == resource.data.uid &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.registrationNumber == resource.data.registrationNumber
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- announcements (News & Updates) ----------------
+    match /announcements/{announcementId} {
+      allow read: if true; // public news feed
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ---------------- sessions (practical sessions) ----------------
+    match /sessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ---------------- attendance records ----------------
+    // Document ID convention: `${sessionId}_${uid}` — this makes a duplicate
+    // attendance record structurally impossible to create, because the
+    // create rule below refuses to write over an existing document.
+    match /attendance/{attendanceId} {
+
+      // A student may only read their OWN attendance records.
+      // An admin may read all attendance records.
+      allow read: if isAdmin() ||
+        (isSignedIn() && resource.data.uid == request.auth.uid);
+
+      // A student may create an attendance record ONLY when:
+      //   1. They are creating it for themselves (no marking others present).
+      //   2. The record doesn't already exist (blocks duplicates/race conditions).
+      //   3. The linked session exists.
+      //   4. request.time (the Firestore SERVER clock, not the student's
+      //      device clock) falls within the session's opening/closing window.
+      //   5. status is exactly "Present" — nothing else can be written here.
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && attendanceId == request.resource.data.sessionId + "_" + request.auth.uid
+        && !exists(/databases/$(database)/documents/attendance/$(attendanceId))
+        && exists(/databases/$(database)/documents/sessions/$(request.resource.data.sessionId))
+        && request.time >= get(/databases/$(database)/documents/sessions/$(request.resource.data.sessionId)).data.openDateTime
+        && request.time <= get(/databases/$(database)/documents/sessions/$(request.resource.data.sessionId)).data.closeDateTime
+        && request.resource.data.status == "Present";
+
+      // Only admins may correct or delete an attendance record.
+      // Students can never edit or delete a record once it's written.
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}
